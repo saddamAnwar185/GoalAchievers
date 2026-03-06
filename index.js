@@ -13,64 +13,39 @@ import withdrawalRoutes from "./Routes/withdrawalRoutes.js";
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import cluster from 'cluster';
-import os from 'os';
 
 dotenv.config();
+connectDB();
 
+const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Logic to run the app
-const startServer = () => {
-  const app = express();
-  
-  connectDB();
+// Middleware
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(fileUpload({
+  useTempFiles: true,
+  tempFileDir: '/tmp/',
+}));
+app.use(cors());
 
-  // Middleware
-  app.use(express.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(cookieParser());
-  app.use(fileUpload({
-    useTempFiles: true,
-    tempFileDir: '/tmp/',
-  }));
-  app.use(cors());
+// API Routes
+app.use("/api", Auth);
+app.use("/api", investment);
+app.use("/api", userRoutes);
+app.use("/api", companyRoutes);
+app.use("/api", adminRoutes);
+app.use("/api", withdrawalRoutes);
 
-  // API Routes
-  app.use("/api", Auth);
-  app.use("/api", investment);
-  app.use("/api", userRoutes);
-  app.use("/api", companyRoutes);
-  app.use("/api", adminRoutes);
-  app.use("/api", withdrawalRoutes);
+// Static Files - Serve from the 'dist' folder
+app.use(express.static(path.join(__dirname, 'dist')));
 
-  // Serve Static Frontend
-  app.use(express.static(path.join(__dirname, 'dist')));
-  
-  // Catch-all route for SPA (React/Vue/etc)
-  app.get('/*splat', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-  });
+// Catch-all: Send index.html for any non-API route (for React/Vite routing)
+app.get('/*splat', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
-  const PORT = process.env.PORT || 8000;
-  app.listen(PORT, () => {
-    console.log(`Server process ${process.pid} running on port ${PORT}`);
-  });
-};
-
-// Vercel or Production: Don't use cluster
-// Local: Use cluster for performance
-if ((cluster.isPrimary || cluster.isMaster) && process.env.NODE_ENV !== 'production') {
-  const numCPUs = os.cpus().length;
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
-  cluster.on('exit', (worker) => {
-    console.log(`Worker ${worker.process.pid} died. Restarting...`);
-    cluster.fork();
-  });
-} else {
-  // This block runs on Vercel or as a worker locally
-  startServer();
-}
+// Export for Vercel
+export default app;
