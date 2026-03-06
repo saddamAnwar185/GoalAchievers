@@ -25,10 +25,7 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(fileUpload({
-  useTempFiles: true,
-  tempFileDir: '/tmp/',
-}));
+app.use(fileUpload());
 app.use(cors());
 
 // API Routes
