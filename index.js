@@ -48,4 +48,6 @@ app.get('/*splat', (req, res) => {
 });
 
 // Export for Vercel
-export default app;
+app.listen(process.env.PORT || 8000, () => {
+  console.log('server is running')
+})
