@@ -1,5 +1,3 @@
-// controllers/investmentController.js
-
 import { User } from "../models/User.js";
 import { Investment } from "../models/Investment.js";
 import cloudinary from "cloudinary"; // Ensure your cloudinary config is imported
