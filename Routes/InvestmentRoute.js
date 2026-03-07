@@ -1,5 +1,5 @@
 import express from "express";
-import { createInvestment, getInvestments } from "../controllers/investmentController.js";
+import { createInvestment, getInvestments } from "../Controllers/investmentController.js";
 import { checkIsUserLogin } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
