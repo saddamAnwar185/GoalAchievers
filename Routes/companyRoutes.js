@@ -1,6 +1,6 @@
 import express from "express";
 import { getCompanyEarnings } from "../Controllers/companyController.js";
-import { checkIsUserLogin, checkUserIsAdmin } from "../middlewares/authMiddleware.js";
+import { checkIsUserLogin, checkUserIsAdmin } from "../Middlewares/authMiddleware.js";
 
 const router = express.Router();
 

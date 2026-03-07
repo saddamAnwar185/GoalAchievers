@@ -4,7 +4,7 @@ import {
   getWithdrawalHistory, 
   getWithdrawalDetail 
 } from "../Controllers/withdrawalController.js";
-import { checkIsUserLogin } from "../middlewares/authMiddleware.js";
+import { checkIsUserLogin } from "../Middlewares/authMiddleware.js";
 
 const router = express.Router();
 

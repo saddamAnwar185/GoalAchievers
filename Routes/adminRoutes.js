@@ -9,7 +9,7 @@ import {
   getCompanyEarnings,
 } from "../Controllers/adminController.js";
 
-import { checkIsUserLogin, checkUserIsAdmin } from "../middlewares/authMiddleware.js";
+import { checkIsUserLogin, checkUserIsAdmin } from "../Middlewares/authMiddleware.js";
 
 const router = express.Router();
 
