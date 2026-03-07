@@ -14,9 +14,26 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-dotenv.config();
-connectDB();
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
 
+
+let isConnected = false;
+
+const connectDatabase = async () => {
+  if (isConnected) return;
+
+  try {
+    await connectDB();
+    isConnected = true;
+    console.log("MongoDB connected");
+  } catch (err) {
+    console.error("MongoDB error:", err);
+  }
+};
+
+connectDatabase();
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
